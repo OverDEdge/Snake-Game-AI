@@ -15,6 +15,7 @@ class Snake(pg.sprite.Sprite):
         self.groups = game.all_sprites
         pg.sprite.Sprite.__init__(self, self.groups)
         self.game = game
+        self.index = index
         elf.pos = vec(col, row)
         self.prev_pos = vec(self.pos.x, self.pos.y)
         self.vel = vec(1, 0)
@@ -71,19 +72,32 @@ class Snake(pg.sprite.Sprite):
 
         self.update_eat_food()
 
-    def set_speed(self):
-        if settings.LEVEL0 < self.game.score < settings.LEVEL1:
-            self.update_rate = settings.SNAKE_LEVEL1_UPDATE_RATE
-        elif settings.LEVEL1 <= self.game.score < settings.LEVEL2:
-            self.update_rate = settings.SNAKE_LEVEL2_UPDATE_RATE
-        elif settings.LEVEL2 <= self.game.score < settings.LEVEL3:
-            self.update_rate = settings.SNAKE_LEVEL3_UPDATE_RATE
-        elif settings.LEVEL3 <= self.game.score < settings.LEVEL4:
-            self.update_rate = settings.SNAKE_LEVEL4_UPDATE_RATE
-        elif settings.LEVEL4 <= self.game.score < settings.LEVEL5:
-            self.update_rate = settings.SNAKE_LEVEL5_UPDATE_RATE
-        elif self.game.score >= settings.LEVEL5:
-            self.update_rate = settings.SNAKE_LEVEL6_UPDATE_RATE
+    def update_ai_dist_to_object(self, group):
+        '''
+        Method for AI to know distances to a group in eight directions
+        '''
+        # Save current position
+        current_pos = vec(self.pos.x, self.pos.y)
+
+        directions = [vec(1, 0), vec(-1, 0), vec(1, 1), vec(-1, 1), vec(0, 1), vec(0, -1), vec(1, -1), vec(-1, -1)]
+        distances = [0] * len(directions)
+
+        for i, dir in enumerate(directions):
+            self.pos = vec(current_pos.x, current_pos.y)
+
+            # Check how far until collide with object in current direction
+            while not check_for_collision(self, group, False) and 0 <= self.pos.x <= settings.GRIDWIDTH and 0 <= self.pos.y <= settings.GRIDHEIGHT:
+                self.pos += dir
+                self.rect.topleft = self.pos * settings.TILESIZE
+
+            # After collision calculate the distance
+            distances[i] = math.sqrt((current_pos.x - self.pos.x) ** 2 + (current_pos.y - self.pos.y) ** 2)
+
+        # Reset position
+        self.pos = current_pos
+        self.rect.topleft = self.pos * settings.TILESIZE
+
+        return distances
 
 
     def update_eat_food(self):
