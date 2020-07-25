@@ -264,26 +264,6 @@ class Snake(pg.sprite.Sprite):
         elif self.pos.y < 0:
             self.pos.y = settings.HEIGHT - settings.TILESIZE
 
-    def move_pressed_key(self):
-        '''
-        Gets the key inputs and sets the correct binding
-        '''
-        keys = pg.key.get_pressed()
-        for binding, keysBound in settings.MOVE_BINDINGS.items():
-            for key in keysBound:
-                if keys[key]:
-                    self.inputState[binding] = True
-                    break
-                else:
-                    self.inputState[binding] = False
-
-    def move_is_key_pressed(self):
-        '''
-        Removes bindings when key is no longer pressed
-        '''
-        if not self.inputState[self.key]:
-            self.key = 'none'
-
     def move_in_direction(self):
         '''
         Loops over all directions and sets velocity based on user input
@@ -293,13 +273,6 @@ class Snake(pg.sprite.Sprite):
         vel_check = (-self.vel.x, self.vel.x, -self.vel.y, self.vel.y)
 
         for i, dir in enumerate(directions):
-            if self.inputState[dir] and vel_check[i] >= 0:
-                if self.key == 'none':
-                    self.vel = vel[i]
-                    self.dir = dir
-                    self.key = dir
-
-        # To get smooth game feel give user reaction immediatly when turning
-        if self.prev_dir != self.dir:
-            self.pos_update_time = 0
-            self.prev_dir = self.dir
+            if self.inputState[dir] and vel_check[i] == 0:
+                self.vel = vel[i]
+                self.dir = dir
