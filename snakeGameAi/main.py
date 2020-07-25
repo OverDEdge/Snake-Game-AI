@@ -88,21 +88,6 @@ class Game:
         else:
             self.playing = False
 
-    def draw_grid(self):
-        x = 0
-        y = 0
-
-        # Vertical lines
-        for _ in range(settings.GRIDWIDTH + 1):
-            pg.draw.line(self.screen, settings.WHITE, (x, 0), (x, settings.HEIGHT))
-            x += settings.TILESIZE
-
-        # Horizontal lines
-        for _ in range(settings.GRIDHEIGHT + 1):
-            pg.draw.line(self.screen, settings.WHITE, (0, y), (settings.WIDTH, y))
-            y += settings.TILESIZE
-
-
     def run(self):
         # Game Loop
         self.playing = True
@@ -110,7 +95,9 @@ class Game:
             self.dt = self.clock.tick(settings.FPS) / 1000.0
             self.events()
             self.update()
-            self.draw()
+            if self.display:
+                self.draw()
+                self.dt = self.clock.tick(settings.FPS) / 1000.0
 
     def events(self):
         # Game Loop - events
