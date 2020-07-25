@@ -44,23 +44,37 @@ class Game:
 
 
     def new(self, genomes, config):
-        self.load_data()
         # Setup for a new game
-        self.score = 0
+        self.scores = []
         self.all_sprites = pg.sprite.LayeredUpdates()
-        self.snake_body = pg.sprite.LayeredUpdates()
         self.walls = pg.sprite.LayeredUpdates()
         self.ground = pg.sprite.LayeredUpdates()
-        self.food = pg.sprite.LayeredUpdates()
+        self.food_groups = []
+        self.snake_body_groups = []
+        self.nets = []
+        self.ge = []
+        self.snakes = []
+        index = 0
+
         for row, tiles in enumerate(self.map.data):
             for col, tile in enumerate(tiles):
                 #Ground(self, col, row)
                 if tile == '1':
                     self.spawn_wall(col, row)
                 if tile == 'S':
-                    self.snake = Snake(self, col, row)
+                    snake_pos = (col, row)
 
-        Food(self)
+        for _, g in genomes:
+            net = neat.nn.FeedForwardNetwork.create(g, config)
+            self.nets.append(net)
+            g.fitness = 0
+            self.ge.append(g)
+            self.scores.append(0)
+            self.snake_body_groups.append(pg.sprite.LayeredUpdates())
+            self.food_groups.append(pg.sprite.LayeredUpdates())
+            self.snakes.append(Snake(self, snake_pos[0], snake_pos[1], Food(self, index), index))
+            index += 1
+
         self.run()
 
     def spawn_wall(self, x ,y):
