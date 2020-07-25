@@ -149,27 +149,30 @@ class Snake(pg.sprite.Sprite):
         Check if snake has found food and if yes adds another body part
         '''
         # Check if snake eats food
-        if check_for_collision(self, self.game.food, True):
-            self.game.score += 10
+        if check_for_collision(self, self.game.food_groups[self.index], True):
+            self.game.scores[self.index] += 1
             last_body_part = self.body_parts[-1]
-            self.body_parts.append(BodyPart(self.game, self, last_body_part.pos.x, last_body_part.pos.y))
-            Food(self.game)
+            self.body_parts.append(BodyPart(self.game, self, last_body_part.pos.x, last_body_part.pos.y, self.index))
+            self.food = Food(self.game, self.index)
+            self.game.ge[self.index].fitness += self.game.scores[self.index]
+            self.max_moves += settings.EXTRA_MOVES
 
     def update_positions(self):
         self.update_body_parts_positions()
 
         # Update snake head position
-        self.pos += self.vel * settings.TILESIZE
+        self.pos += self.vel
         self.pos_update_time = pg.time.get_ticks()
 
-        self.update_body_parts_img()
-        self.update_head_img()
-        self.update_tail_img()
+        if self.game.display:
+            self.update_body_parts_img()
+            self.update_head_img()
+            self.update_tail_img()
 
         #self.update_screen_wrap()
 
         self.rect = self.image.get_rect()
-        self.rect.topleft = self.pos
+        self.rect.topleft = self.pos * settings.TILESIZE
 
     def update_body_parts_positions(self):
         '''
