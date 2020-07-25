@@ -13,13 +13,14 @@ class Snake(pg.sprite.Sprite):
         '''
         self._layer = settings.SNAKE_LAYER
         self.groups = game.all_sprites
+        self.index = index
         pg.sprite.Sprite.__init__(self, self.groups)
         self.game = game
-        self.index = index
-        elf.pos = vec(col, row)
+        self.food = food
+        self.pos = vec(col, row)
         self.prev_pos = vec(self.pos.x, self.pos.y)
         self.vel = vec(1, 0)
-        self.body_parts = [BodyPart(self.game, self, x - 1, y)]
+        self.body_parts = [BodyPart(self.game, self, col - 1, row, self.index)]
         self.images = []
         self.colorkey = settings.WHITE
         load_moving_images(self, self.game.snake_spritesheet, settings.SNAKE_IMG_HEAD, self.colorkey)
@@ -29,7 +30,7 @@ class Snake(pg.sprite.Sprite):
         self.non_rot_tail = self.game.snake_spritesheet.get_image(*settings.SNAKE_IMG_TAIL, settings.SIZE)
         self.tail = self.non_rot_tail
         self.rect = self.image.get_rect()
-        self.rect.topleft = self.pos
+        self.rect.topleft = self.pos * settings.TILESIZE
         self.pos_update_time = 0
         self.collide = False
         self.key = 'none'
@@ -37,7 +38,10 @@ class Snake(pg.sprite.Sprite):
         self.prev_dir = self.dir
         self.last_change_img_time = 0
         self.img_upd_time = settings.SWITCH_SPRITE_IMAGE
-        self.update_rate = settings.SNAKE_START_UPDATE_RATE
+        self.update_rate = settings.SNAKE_LEVEL1_UPDATE_RATE
+        self.grid_position = [[0] * (settings.GRIDHEIGHT) for _ in range(settings.GRIDWIDTH)]
+        self.max_moves = settings.MAX_MOVES
+        self.moves = 0
 
         # Key mappings
         self.inputState = {
@@ -99,6 +103,39 @@ class Snake(pg.sprite.Sprite):
 
         return distances
 
+    def update_ai_output(self):
+        '''
+        Method for AI to calculate output and action
+        '''
+        # Get distance to next object
+        distances_wall = self.update_ai_dist_to_object(self.game.walls)
+        distances_body = self.update_ai_dist_to_object(self.game.snake_body_groups[self.index])
+        distances_food = self.update_ai_dist_to_object(self.game.food_groups[self.index])
+
+        output = self.game.nets[self.index].activate(
+                (*distances_wall, *distances_body, *distances_food)
+        )
+
+        # Reset move
+        self.inputState = {
+                'up': False,
+                'down': False,
+                'right': False,
+                'left': False,
+                'none': False
+        }
+
+        # Interpret ai ouput to move
+        if output[0] == max(output):
+            self.inputState['left'] = True
+        elif output[1] == max(output):
+            self.inputState['right'] = True
+        elif output[2] == max(output):
+            self.inputState['up'] = True
+        else:
+            self.inputState['down'] = True
+
+        self.moves += 1
 
     def update_eat_food(self):
         '''
