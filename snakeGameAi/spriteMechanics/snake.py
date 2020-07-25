@@ -251,19 +251,6 @@ class Snake(pg.sprite.Sprite):
             pos_pre.x < pos.x and pos.y > pos_post.y):
             return self.game.snake_spritesheet.get_image(*settings.SNAKE_IMG_TURN[3], settings.SIZE)
 
-    def update_screen_wrap(self):
-        '''
-        Wraps snake position from edge of screen to other side
-        '''
-        if self.pos.x > settings.WIDTH - settings.TILESIZE:
-            self.pos.x = 0
-        elif self.pos.x < 0:
-            self.pos.x = settings.WIDTH - settings.TILESIZE
-        if self.pos.y > settings.HEIGHT - settings.TILESIZE:
-            self.pos.y = 0
-        elif self.pos.y < 0:
-            self.pos.y = settings.HEIGHT - settings.TILESIZE
-
     def move_in_direction(self):
         '''
         Loops over all directions and sets velocity based on user input

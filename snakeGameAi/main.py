@@ -113,9 +113,7 @@ class Game:
         pg.display.set_caption("{:.2f}".format(self.clock.get_fps()))
         self.screen.fill(settings.BGCOLOR)
         for sprite in self.all_sprites:
-            self.screen.blit(sprite.image, sprite.pos)
-        #self.draw_grid()
-        self.draw_text(str(self.score), 25, settings.WHITE, settings.WIDTH / 2, 5)
+            self.screen.blit(sprite.image, sprite.pos * settings.TILESIZE)
         pg.display.flip()
 
     def draw_text(self, text, size, color, x, y):
