@@ -53,28 +53,21 @@ class Snake(pg.sprite.Sprite):
         }
 
     def update(self):
-        # Check if speed shall increase
-        self.set_speed()
-
-        # Get user input
-        self.move_pressed_key()
-        self.move_is_key_pressed()
-        self.move_in_direction()
-        animate_moving(self, self.images)
-
         # Get current time
         now = pg.time.get_ticks()
 
-        # Only update position at certain intervals
+        # Only update position at certain intervals (if display is active)
         # SNAKE_UPDATE_RATE determines snake speed
-        if now - self.pos_update_time > self.update_rate:
-
-            if check_for_collision(self, self.game.snake_body, False) or check_for_collision(self, self.game.walls, False):
-                self.collide = True
-            else:
-                self.update_positions()
-
-        self.update_eat_food()
+        if self.game.display:
+            #if now - self.pos_update_time > self.update_rate:
+            self.update_ai_output()
+            self.move_in_direction()
+            animate_moving(self, self.images)
+            self.update_ai_collisions()
+        else:
+            self.update_ai_output()
+            self.move_in_direction()
+            self.update_ai_collisions()
 
     def update_ai_dist_to_object(self, group):
         '''
@@ -136,6 +129,20 @@ class Snake(pg.sprite.Sprite):
             self.inputState['down'] = True
 
         self.moves += 1
+
+    def update_ai_collisions(self):
+        '''
+        Method to check if AI has collided with anything
+        '''
+        # To avoid circling, keep track of how many times a position has been visted
+        self.grid_position[int(self.pos.x)][int(self.pos.y)] += 1
+
+        if check_for_collision(self, self.game.snake_body_groups[self.index], False) or check_for_collision(self, self.game.walls, False) or self.moves > self.max_moves:
+            self.game.collided_snake(self)
+        else:
+            self.game.ge[self.index].fitness += 0.1
+            self.update_positions()
+            self.update_eat_food()
 
     def update_eat_food(self):
         '''
