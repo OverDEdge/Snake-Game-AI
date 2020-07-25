@@ -7,7 +7,7 @@ from .body_part import BodyPart
 from .food import Food
 
 class Snake(pg.sprite.Sprite):
-    def __init__(self, game, x, y):
+    def __init__(self, game, col, row, food, index):
         '''
         Initializing Snake head
         '''
@@ -15,7 +15,7 @@ class Snake(pg.sprite.Sprite):
         self.groups = game.all_sprites
         pg.sprite.Sprite.__init__(self, self.groups)
         self.game = game
-        self.pos = vec(x, y) * settings.TILESIZE
+        elf.pos = vec(col, row)
         self.prev_pos = vec(self.pos.x, self.pos.y)
         self.vel = vec(1, 0)
         self.body_parts = [BodyPart(self.game, self, x - 1, y)]
