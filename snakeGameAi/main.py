@@ -125,6 +125,24 @@ class Game:
         text_rect.midtop = (x, y)
         self.screen.blit(text_surface, text_rect)
 
+    def collided_snake(self, snake):
+        '''
+        Method that is run when a snake has collided with an object.
+        It will decrease the fitness function and remove it from the
+        snakes in the game.
+        It will also kill all related sprites to that snake:
+        Head, Body and Food
+        '''
+        self.ge[snake.index].fitness -= 10
+        self.snakes.remove(snake)
+
+        # Remove snake from screen
+        snake.food.kill()
+        for body_part in snake.body_parts:
+            body_part.kill()
+
+        snake.kill()
+
     def quit(self):
         pg.quit()
         sys.exit()
