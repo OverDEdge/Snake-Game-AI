@@ -82,8 +82,10 @@ class Game:
 
     def update(self):
         # Game Loop - update
-        self.all_sprites.update()
-        if self.snake.collide:
+        if len(self.snakes) > 0:
+            # Game Loop - update
+            self.all_sprites.update()
+        else:
             self.playing = False
 
     def draw_grid(self):
