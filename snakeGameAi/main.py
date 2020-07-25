@@ -4,6 +4,7 @@ import pygame as pg
 import sys
 from os import path
 import random
+import neat
 from .spriteMechanics.food import Food
 from .spriteMechanics.body_part import BodyPart
 from .spriteMechanics.ground import Ground
@@ -39,7 +40,7 @@ class Game:
                 self.highscore = 0
 
 
-    def new(self):
+    def new(self, genomes, config):
         self.load_data()
         # Setup for a new game
         self.score = 0
@@ -165,12 +166,32 @@ class Game:
         pg.quit()
         sys.exit()
 
-g = Game()
+def run(config_path):
+    '''
+    NEAT run method
+    '''
+    global DISPLAY_ON
+    # Load configuration.
+    config = neat.Config(neat.DefaultGenome, neat.DefaultReproduction,
+                         neat.DefaultSpeciesSet, neat.DefaultStagnation,
+                         config_path)
 
-while g.running_program:
-    g.launch_start_screen()
-    g.new()
-    g.launch_go_screen()
+    # Create the population, which is the top-level object for a NEAT run.
+    p = neat.Population(config)
 
-pg.quit()
-sys.exit()
+    # Add a stdout reporter to show progress in the terminal.
+    p.add_reporter(neat.StdOutReporter(True))
+    stats = neat.StatisticsReporter()
+    p.add_reporter(stats)
+
+    # Run for up to specified umber of generations.
+    winner = p.run(eval_genomes, settings.NUMBER_OF_GENOMES)
+
+    # Quit game
+    pg.quit()
+    sys.exit()
+
+def eval_genomes(genomes, config):
+    # Start a game
+    game = Game()
+    game.new(genomes, config)
