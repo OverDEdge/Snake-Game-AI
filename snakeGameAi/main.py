@@ -15,10 +15,13 @@ from .spriteMechanics.tilemap import Map
 from .spriteMechanics import settings
 from .spriteMechanics import gen_map
 
+DISPLAY_ON = False
+
 class Game:
-    def __init__(self):
+    def __init__(self, display = False):
         # Intialize game window, etc...
         self.running_program = True
+        self.display = display
         pg.init()
         gen_map.generate_map()
         pg.mixer.init()
@@ -193,5 +196,5 @@ def run(config_path):
 
 def eval_genomes(genomes, config):
     # Start a game
-    game = Game()
+    game = Game(DISPLAY_ON)
     game.new(genomes, config)
