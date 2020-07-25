@@ -125,49 +125,6 @@ class Game:
         text_rect.midtop = (x, y)
         self.screen.blit(text_surface, text_rect)
 
-    def launch_go_screen(self):
-        # Game Over screen
-
-        if self.score > self.highscore:
-            with open(path.join(settings.GAME_FOLDER, settings.HIGHSCORE_FILE), 'w') as f:
-                self.highscore = self.score
-                f.write(str(self.score))
-            self.draw_text(settings.NEW_HIGHSCORE_TEXT + str(self.score), 30, settings.RED, settings.WIDTH / 2, settings.HEIGHT * 2 / 3)
-        else:
-            self.draw_text(settings.SCORE_TEXT + str(self.score), 25, settings.YELLOW, settings.WIDTH / 2, settings.HEIGHT * 3 / 4)
-            self.draw_text(settings.HIGH_SCORE_TEXT + str(self.highscore), 30, settings.RED, settings.WIDTH / 2, settings.HEIGHT * 3 / 5)
-
-        self.draw_text(settings.GAME_OVER_TEXT, 40, settings.WHITE, settings.WIDTH / 2, settings.HEIGHT / 4)
-        self.draw_text(settings.PRESS_TO_PLAY_AGAIN, 17, settings.YELLOW, settings.WIDTH / 2, settings.HEIGHT * 2 / 5)
-        pg.display.flip()
-        self.wait_for_key()
-
-    def launch_start_screen(self):
-        # Start screen
-        self.screen.fill(settings.BGCOLOR)
-        self.draw_text(settings.TITLE, 60, settings.YELLOW, settings.WIDTH / 2, settings.HEIGHT / 3)
-        self.draw_text(settings.PRESS_TO_PLAY, 20, settings.GREEN, settings.WIDTH / 2, settings.HEIGHT * 3 / 5)
-        self.draw_text(settings.HIGH_SCORE_TEXT + str(self.highscore), 25, settings.RED, settings.WIDTH / 2, settings.HEIGHT * 1 / 6)
-        pg.display.flip()
-        self.wait_for_key()
-
-    # Waiting for any key input
-    def wait_for_key(self):
-        waiting = True
-        key_down = False
-        while waiting:
-            self.clock.tick(settings.FPS)
-            for event in pg.event.get():
-                if event.type == pg.QUIT:
-                    self.quit()
-                if event.type == pg.KEYDOWN:
-                    if event.key == pg.K_ESCAPE:
-                        self.quit()
-                if event.type == pg.KEYDOWN:
-                    key_down = True
-                if event.type == pg.KEYUP and key_down:
-                    waiting = False
-
     def quit(self):
         pg.quit()
         sys.exit()
