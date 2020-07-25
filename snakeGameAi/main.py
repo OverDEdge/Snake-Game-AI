@@ -4,15 +4,15 @@ import pygame as pg
 import sys
 from os import path
 import random
-from .food import Food
-from .body_part import BodyPart
-from .ground import Ground
-from .snake import Snake
-from .spritesheet import Spritesheet
-from .wall import Wall
-from .tilemap import Map
-from . import settings
-from . import gen_map
+from .spriteMechanics.food import Food
+from .spriteMechanics.body_part import BodyPart
+from .spriteMechanics.ground import Ground
+from .spriteMechanics.snake import Snake
+from .spriteMechanics.spritesheet import Spritesheet
+from .spriteMechanics.wall import Wall
+from .spriteMechanics.tilemap import Map
+from .spriteMechanics import settings
+from .spriteMechanics import gen_map
 
 class Game:
     def __init__(self):
