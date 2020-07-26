@@ -5,6 +5,7 @@ import sys
 from os import path
 import random
 import neat
+import pickle
 from .spriteMechanics.food import Food
 from .spriteMechanics.body_part import BodyPart
 from .spriteMechanics.ground import Ground
@@ -154,6 +155,13 @@ def run(config_path):
 
     # Run for up to specified umber of generations.
     winner = p.run(eval_genomes, settings.NUMBER_OF_GENOMES)
+
+    # Save to file
+    with open("winner.pkl", "wb") as f:
+        pickle.dump(winner, f)
+
+    # show final stats
+    print('\nBest genome:\n{!s}'.format(winner))
 
     # Quit game
     pg.quit()
