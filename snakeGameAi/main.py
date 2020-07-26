@@ -15,7 +15,7 @@ from .spriteMechanics.tilemap import Map
 from .spriteMechanics import settings
 from .spriteMechanics import gen_map
 
-DISPLAY_ON = False
+DISPLAY_ON = True
 
 class Game:
     def __init__(self, display = False):

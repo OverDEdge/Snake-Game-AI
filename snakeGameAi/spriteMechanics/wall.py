@@ -15,4 +15,4 @@ class Wall(pg.sprite.Sprite):
         self.image = remove_background_from_img(self.image, settings.BLACK)
         self.rect = self.image.get_rect()
         self.pos = vec(col, row)
-        self.rect.topleft = self.pos
+        self.rect.topleft = self.pos * settings.TILESIZE

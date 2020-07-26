@@ -40,7 +40,6 @@ class Snake(pg.sprite.Sprite):
         self.last_change_img_time = 0
         self.img_upd_time = settings.SWITCH_SPRITE_IMAGE
         self.update_rate = settings.SNAKE_START_UPDATE_RATE
-        self.grid_position = [[0] * (settings.GRIDHEIGHT) for _ in range(settings.GRIDWIDTH)]
         self.max_moves = settings.MAX_MOVES
         self.moves = 0
 
@@ -60,7 +59,6 @@ class Snake(pg.sprite.Sprite):
         # Only update position at certain intervals (if display is active)
         # SNAKE_UPDATE_RATE determines snake speed
         if self.game.display:
-            #if now - self.pos_update_time > self.update_rate:
             self.update_ai_output()
             self.move_in_direction()
             animate_moving(self, self.images)
@@ -135,11 +133,9 @@ class Snake(pg.sprite.Sprite):
         '''
         Method to check if AI has collided with anything
         '''
-        # To avoid circling, keep track of how many times a position has been visted
-        self.grid_position[int(self.pos.x)][int(self.pos.y)] += 1
 
         if check_for_collision(self, self.game.snake_body_groups[self.index], False) or check_for_collision(self, self.game.walls, False) or self.moves > self.max_moves:
-            # Will call the game method to remove snake from lsit of snakes and update fitness
+            # Will call the game method to remove snake from list of snakes and update fitness
             self.game.collided_snake(self)
         else:
             self.game.ge[self.index].fitness += 0.1
@@ -216,7 +212,7 @@ class Snake(pg.sprite.Sprite):
 
     def update_tail_img(self):
         '''
-        Set appropriate image for tail depending on movement directions
+        Set appropriate image for tail
         '''
 
         tail_pos = self.body_parts[-1].pos
@@ -228,11 +224,11 @@ class Snake(pg.sprite.Sprite):
 
         if front_of_tail.y < tail_pos.y:
             self.body_parts[-1].image = self.non_rot_tail
-        if front_of_tail.x > tail_pos.x:
+        elif front_of_tail.x > tail_pos.x:
             self.body_parts[-1].image = pg.transform.rotate(self.non_rot_tail, 90)
-        if front_of_tail.y > tail_pos.y:
+        elif front_of_tail.y > tail_pos.y:
             self.body_parts[-1].image = pg.transform.flip(self.non_rot_tail, False, True)
-        if front_of_tail.x < tail_pos.x:
+        else:
             self.body_parts[-1].image = pg.transform.rotate(self.non_rot_tail, -90)
 
         self.body_parts[-1].image = remove_background_from_img(self.body_parts[-1].image, self.colorkey)
