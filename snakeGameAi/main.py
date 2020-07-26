@@ -15,7 +15,7 @@ from .spriteMechanics.tilemap import Map
 from .spriteMechanics import settings
 from .spriteMechanics import gen_map
 
-DISPLAY_ON = True
+DISPLAY_ON = False
 
 class Game:
     def __init__(self, display = False):
@@ -120,7 +120,7 @@ class Game:
         It will also kill all related sprites to that snake:
         Head, Body and Food
         '''
-        self.ge[snake.index].fitness -= 10
+        self.ge[snake.index].fitness -= 50
         self.snakes.remove(snake)
 
         # Remove snake from screen

@@ -87,7 +87,10 @@ class Snake(pg.sprite.Sprite):
                 self.rect.topleft = self.pos * settings.TILESIZE
 
             # After collision calculate the distance
-            distances[i] = math.sqrt((current_pos.x - self.pos.x) ** 2 + (current_pos.y - self.pos.y) ** 2)
+            if 0 <= self.pos.x <= settings.GRIDWIDTH and 0 <= self.pos.y <= settings.GRIDHEIGHT:
+                distances[i] = math.sqrt((current_pos.x - self.pos.x) ** 2 + (current_pos.y - self.pos.y) ** 2)
+            else:
+                distance[i] = -1000
 
         # Reset position
         self.pos = current_pos
@@ -152,7 +155,7 @@ class Snake(pg.sprite.Sprite):
             last_body_part = self.body_parts[-1]
             self.body_parts.append(BodyPart(self.game, self, last_body_part.pos.x, last_body_part.pos.y, self.index))
             self.food = Food(self.game, self.index)
-            self.game.ge[self.index].fitness += self.game.scores[self.index]
+            self.game.ge[self.index].fitness += 1
             self.max_moves += settings.EXTRA_MOVES
 
     def update_positions(self):
