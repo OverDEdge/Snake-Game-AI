@@ -138,6 +138,7 @@ class Snake(pg.sprite.Sprite):
         self.grid_position[int(self.pos.x)][int(self.pos.y)] += 1
 
         if check_for_collision(self, self.game.snake_body_groups[self.index], False) or check_for_collision(self, self.game.walls, False) or self.moves > self.max_moves:
+            # Will call the game method to remove snake from lsit of snakes and update fitness
             self.game.collided_snake(self)
         else:
             self.game.ge[self.index].fitness += 0.1
@@ -185,7 +186,9 @@ class Snake(pg.sprite.Sprite):
         self.body_parts[0].pos = vec(self.pos.x, self.pos.y)
 
     def update_head_img(self):
-
+        '''
+        Sets the image for the head of the snake depending on movement direction
+        '''
         if self.dir == 'up':
             self.image = pg.transform.flip(self.non_rot_image, False, True)
         if self.dir == 'right':
@@ -197,7 +200,7 @@ class Snake(pg.sprite.Sprite):
 
     def update_body_parts_img(self):
         '''
-        Sets the appropriate body image depending on position
+        Sets the appropriate body image depending on movement direction
         '''
 
         # Behind head
@@ -212,7 +215,7 @@ class Snake(pg.sprite.Sprite):
 
     def update_tail_img(self):
         '''
-        Set appropriate image for tail
+        Set appropriate image for tail depending on movement directions
         '''
 
         tail_pos = self.body_parts[-1].pos
@@ -234,6 +237,9 @@ class Snake(pg.sprite.Sprite):
         self.body_parts[-1].image = remove_background_from_img(self.body_parts[-1].image, self.colorkey)
 
     def update_correct_body_part(self, pos_pre, pos, pos_post):
+        '''
+        Depending on position of the following and preceding body part the correct body part image is set.
+        '''
         if pos_pre.x == pos_post.x:
             return self.game.snake_spritesheet.get_image(*settings.SNAKE_IMG_BODY, settings.SIZE)
         if pos_pre.y == pos_post.y:
