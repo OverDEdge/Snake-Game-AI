@@ -38,7 +38,7 @@ class Snake(pg.sprite.Sprite):
         self.prev_dir = self.dir
         self.last_change_img_time = 0
         self.img_upd_time = settings.SWITCH_SPRITE_IMAGE
-        self.update_rate = settings.SNAKE_LEVEL1_UPDATE_RATE
+        self.update_rate = settings.SNAKE_START_UPDATE_RATE
         self.grid_position = [[0] * (settings.GRIDHEIGHT) for _ in range(settings.GRIDWIDTH)]
         self.max_moves = settings.MAX_MOVES
         self.moves = 0
