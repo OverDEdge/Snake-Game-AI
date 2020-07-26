@@ -90,7 +90,7 @@ class Snake(pg.sprite.Sprite):
             if 0 <= self.pos.x <= settings.GRIDWIDTH and 0 <= self.pos.y <= settings.GRIDHEIGHT:
                 distances[i] = math.sqrt((current_pos.x - self.pos.x) ** 2 + (current_pos.y - self.pos.y) ** 2)
             else:
-                distance[i] = -1000
+                distances[i] = -1000
 
         # Reset position
         self.pos = current_pos
