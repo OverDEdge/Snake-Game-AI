@@ -28,7 +28,7 @@ GRIDHEIGHT = 17
 WIDTH = GRIDWIDTH * TILESIZE   # 16 * 64 or 32 * 32 or 64 * 16
 HEIGHT = GRIDHEIGHT * TILESIZE  # 16 * 48 or 32 * 24 or 64 * 12
 FPS = 60
-TITLE = "Snake"
+TITLE = "Snake Game AI"
 BGCOLOR = BLACK
 HIGHSCORE_FILE = 'highscore.txt'
 
@@ -39,12 +39,6 @@ MAP_FOLDER = path.join(GAME_FOLDER, 'maps')
 
 # Text Prompts
 FONT_NAME = 'arial'
-GAME_OVER_TEXT = "Game Over - You Died!"
-PRESS_TO_PLAY = "Press any Key to Start Playing or Press 'ESC' to Quit"
-PRESS_TO_PLAY_AGAIN = "Press any Key to Start Playing Again or Press 'ESC' to Quit"
-SCORE_TEXT = "Your Score was: "
-NEW_HIGHSCORE_TEXT = "Congrats! You set a new High Score of: "
-HIGH_SCORE_TEXT = "High Score: "
 
 # Snake settings
 SNAKE_START_UPDATE_RATE = 120

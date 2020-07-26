@@ -31,17 +31,6 @@ class Game:
         self.map = Map(path.join(settings.MAP_FOLDER, settings.MAP_IMG))
         self.font_name = pg.font.match_font(settings.FONT_NAME)
         self.snake_spritesheet = Spritesheet(path.join(settings.IMG_FOLDER, settings.SNAKE_SPRITESHEET))
-        self.load_data()
-
-    def load_data(self):
-        # Load Highscore file
-        with open(path.join(settings.GAME_FOLDER, settings.HIGHSCORE_FILE), 'a+') as f:
-            f.seek(0)
-            try:
-                self.highscore = int(f.read())
-            except:
-                self.highscore = 0
-
 
     def new(self, genomes, config):
         # Setup for a new game
@@ -110,7 +99,7 @@ class Game:
 
     def draw(self):
         # Game Loop - draw
-        pg.display.set_caption("{:.2f}".format(self.clock.get_fps()))
+        #pg.display.set_caption("{:.2f}".format(self.clock.get_fps()))
         self.screen.fill(settings.BGCOLOR)
         for sprite in self.all_sprites:
             self.screen.blit(sprite.image, sprite.pos * settings.TILESIZE)
