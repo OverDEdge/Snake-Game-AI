@@ -1,4 +1,5 @@
 import pygame as pg
+import math
 from os import path
 from . import settings
 from .settings import vec
